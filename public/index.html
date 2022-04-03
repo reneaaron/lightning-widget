@@ -7,7 +7,9 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style>
-      a { font-size: 5em; }
+      body {
+        background: #f4f4f0;
+      }
     </style>
   </head>
   <body>
@@ -15,8 +17,30 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <lightning-widget 
+      name="René Aaron"
+      address="reneaaron@getalby.com"
+      amount="21"
+      fiat="EUR"
+      image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g">
+    </lightning-widget>
+
+    <br>
+    <div style="width: 600px">
+        <lightning-widget 
+        name="René Aaron"
+        address="reneaaron@getalby.com"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g">
+      </lightning-widget>
+    </div>
+    <br>
+
+    <div style="width: 300px">
+      <lightning-widget 
+      name="René Aaron"
       address="reneaaron@getalby.com"
       image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g">
     </lightning-widget>
+  </div>
+
   </body>
 </html>
