@@ -4,17 +4,24 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "vue-custom-element": "^3.3.0"
+    "cors": "^2.8.5",
+    "invoices": "^2.0.4",
+    "lnurl-pay": "^0.2.3",
+    "qrcode": "^1.5.0",
+    "stream": "^0.0.2",
+    "vue-custom-element": "^3.3.0",
+    "webln": "^0.3.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/compiler-sfc": "^3.2.31",
     "eslint-plugin-vue": "^8.5.0",
     "webpack-bundle-analyzer": "^4.5.0"
   }
