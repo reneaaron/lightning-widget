@@ -85,7 +85,7 @@
 </template>
 
 <script>
-const host = "http://localhost:3000";
+const host = "https://widgets.twentyuno.net";
 
 async function fetchInvoice(to, amount, comment) {
   const invoice = await fetch(host + "/invoice", {
