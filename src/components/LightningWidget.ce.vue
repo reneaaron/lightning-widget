@@ -60,7 +60,7 @@
   <div class="popup" v-if="popup" @click="popup = false">
     <div class="popup-content" @click.stop>
       <div class="popup-close"  @click="popup = false">
-          <img src="/assets/close.svg" width="32" height="32" />
+          <img src="https://embed.twentyuno.net/assets/close.svg" width="32" height="32" />
       </div>
       <h2 class="title">No wallet found</h2>
       <p>
@@ -73,7 +73,7 @@
       <div class="center">
         or use an external wallet 
         <div v-if="popup && paymentRequest">
-          <img :src="'/qr/' +  paymentRequest" alt="qr" />
+          <img :src="'https://embed.twentyuno.net/qr/' +  paymentRequest" alt="qr" />
           <input type="text" :value="paymentRequest" readonly />
         </div>
         <div v-else>
