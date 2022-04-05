@@ -157,7 +157,7 @@ export default {
 };
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 
 [v-cloak] {
   display: none;
@@ -262,6 +262,7 @@ h3 {
 }
 
 .button {
+  font-family: "Inter", sans-serif;
   background-color: #000;
   cursor: pointer;
   font-size: 16px;
@@ -272,6 +273,7 @@ h3 {
   padding: 14px 16px;
   transition: all 0.14s ease-out;
   width: 100%;
+  font-weight: 500;
 }
 
 .button:hover {
