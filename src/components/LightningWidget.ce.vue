@@ -225,6 +225,7 @@ export default {
   border: 1px #000 solid;
   border-radius: 4px;
   overflow: hidden;
+  text-align: left;
 }
 
 .center {
@@ -257,6 +258,7 @@ export default {
 
 h3 {
   margin: 0;
+  text-align: left;
 }
 
 .button {
