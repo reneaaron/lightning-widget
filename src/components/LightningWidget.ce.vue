@@ -166,6 +166,7 @@ export default {
   border: 1px solid #000;
   margin: 1em;
   max-width: 150px;
+  max-height: 150px;
 }
 
 .popup-content {
@@ -296,6 +297,7 @@ h3 {
 }
 
 input {
+  font-family: "Inter", sans-serif;
   width: 100%;
   border: none;
   outline: none;
