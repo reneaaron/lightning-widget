@@ -30,7 +30,7 @@
         @click="pay()"
         v-bind:disabled="loading"
       >
-        <img class="loading" v-if="loading" src="/assets/loading.svg" />
+        <img class="loading" v-if="loading" src="https://embed.twentyuno.net/assets/loading.svg" />
         {{ !loading ? "⚡ Pay" : "Loading..." }}
       </button>
       <div class="text-secondary fiat center" v-if="fiat && fiatAmount">
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-const host = "https://widgets.twentyuno.net";
+const host = "https://embed.twentyuno.net";
 
 async function fetchInvoice(to, amount, comment) {
   const invoice = await fetch(host + "/invoice", {
@@ -259,6 +259,7 @@ export default {
 h3 {
   margin: 0;
   text-align: left;
+  color: #000;
 }
 
 .button {
