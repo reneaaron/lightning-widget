@@ -1,9 +1,6 @@
 <template>
   <div class="card" v-cloak>
-    <div
-      class="image"
-      v-bind:style="{ backgroundImage: 'url(' + image + ')' }"
-    ></div>
+    <img class="rounded" :src="image" alt="" />
     <div class="content">
       <h3>{{ name }}</h3>
       <span class="fiat text-secondary">{{ address }}</span>
@@ -163,6 +160,14 @@ export default {
   display: none;
 }
 
+
+.rounded {
+  border-radius: 50%;
+  border: 1px solid #000;
+  margin: 1em;
+  max-width: 150px;
+}
+
 .popup-content {
   font-family: "Inter", sans-serif;
   background: #fff;
@@ -251,10 +256,11 @@ export default {
 }
 */
 
-.card > div:not(.image) {
-  padding: 2rem;
+.card > * {
   flex-grow: 1;
+  margin: 1.25rem;
 }
+
 
 h3 {
   margin: 0;
@@ -274,6 +280,7 @@ h3 {
   padding: 14px 16px;
   transition: all 0.14s ease-out;
   width: 100%;
+  min-width: 200px;
   font-weight: 500;
 }
 
