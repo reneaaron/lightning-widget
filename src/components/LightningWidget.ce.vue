@@ -1,6 +1,6 @@
 <template>
   <div class="card" v-cloak>
-    <img class="rounded" :src="image" alt="" />
+    <img ng-if="image" class="rounded" :src="image" alt="" />
     <div class="content">
       <h3>{{ name }}</h3>
       <span class="fiat text-secondary">{{ address }}</span>
