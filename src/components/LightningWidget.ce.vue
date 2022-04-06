@@ -121,8 +121,26 @@ export default {
       return ((this.currentAmount * 45000) / 100000000).toFixed(2);
     },
   },
-  mounted() {},
+  mounted() {
+  const fontImport = document.createElement('link')
+ this.setAttributes(fontImport, [
+   {
+     name: 'href',
+     value:
+       'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
+   },
+   { name: 'rel', value: 'stylesheet' },
+   { name: 'type', value: 'text/css' }
+ ])
+ document.head.appendChild(fontImport)
+
+  },
   methods: {
+    setAttributes (elem, attrs) {
+        attrs.forEach(attr => {
+          elem.setAttribute(attr.name, attr.value)
+        })
+    },
     pay: async function () {
       let webln;
 
@@ -152,12 +170,12 @@ export default {
 };
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 
-[v-cloak] {
-  display: none;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+* {
+  font-family: "Inter", sans-serif;
 }
-
 
 .rounded {
   border-radius: 50%;
@@ -168,7 +186,6 @@ export default {
 }
 
 .popup-content {
-  font-family: "Inter", sans-serif;
   background: #fff;
   max-width: 360px;
   width: 40%;
@@ -180,6 +197,7 @@ export default {
   overflow: hidden;
   cursor: default;
   position: relative;
+  color: #000;
 }
 
 .right {
@@ -219,7 +237,6 @@ export default {
 
 .card {
   position: relative;
-  font-family: "Inter", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,12 +266,6 @@ export default {
   background-position: center center;
 }
 
-/*
-@media screen and (max-width: 992px) {
-  .image { width: 100%; max-width: 100%; height: 250px; }
-}
-*/
-
 .card > * {
   flex-grow: 1;
   margin: 1.25rem;
@@ -280,7 +291,7 @@ h3 {
   transition: all 0.14s ease-out;
   width: 100%;
   min-width: 200px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .button:hover {
