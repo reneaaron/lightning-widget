@@ -9,7 +9,6 @@ var cors = require('cors')
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../../public')))
 app.use(express.static(path.join(__dirname, '../../dist')))
 app.use('/assets', express.static(path.join(__dirname, '../../assets')))
 
@@ -54,6 +53,6 @@ app.get("/qr/:data", async function (req, res) {
   }
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 console.log(`Running on ${port}`);
 app.listen(port);
