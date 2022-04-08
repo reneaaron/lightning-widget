@@ -336,7 +336,7 @@ export default {
 
 #root {
   position: relative;
-  min-width: 330px;
+  min-width: 354px;
   width: 100%;
 }
 
