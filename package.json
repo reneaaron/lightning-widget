@@ -14,6 +14,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "invoices": "^2.0.4",
+    "js-confetti": "^0.10.2",
     "lnurl-pay": "^0.2.3",
     "qrcode": "^1.5.0",
     "stream": "^0.0.2",

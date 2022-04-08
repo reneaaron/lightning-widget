@@ -8,11 +8,21 @@
     <title>⚡ Widgets</title>
     <style>
       body {
-        background: #f4f4f0;
+        background: #333;
       }
-
-      div {
-        margin: 0 auto;
+      .small {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      [v-cloak] {
+        display: none !important;
+      }
+      .small lightning-widget {
+        width: 33%;
+      }
+      lightning-widget {
+        margin: 1em;
       }
     </style>
     <script src="/js/app.js"></script>
@@ -21,6 +31,88 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+
+    <div class="small">
+      <lightning-widget 
+      name="René Aaron"
+      address="reneaaron@getalby.com"
+      amount="21"
+      accent="#9745FF"
+      image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+    
+    <lightning-widget 
+    name="René Aaron"
+    address="reneaaron@getalby.com"
+    amount="21"
+    initial-step="amount"
+    accent="#ffc800"
+    image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+
+    <lightning-widget 
+      name="René Aaron"
+      address="reneaaron@getalby.com"
+      amount="21"
+      initial-step="note"
+      accent="orange"
+      image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget> 
+    
+    </div>
+    <div class="small">
+      <lightning-widget 
+        name="René Aaron"
+        address="reneaaron@getalby.com"
+        amount="21"
+        initial-step="pay"
+        accent="orange"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget> 
+      <lightning-widget 
+        name="René Aaron"
+        address="reneaaron@getalby.com"
+        amount="21"
+        initial-step="qr"
+        accent="orange"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget> 
+      <lightning-widget 
+        name="René Aaron"
+        address="reneaaron@getalby.com"
+        amount="21"
+        initial-step="thankyou"
+        accent="orange"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget> 
+    </div>
+    <div>
+        <lightning-widget 
+          name="René Aaron"
+          address="reneaaron@getalby.com"
+          amount="21"
+          accent="#9745FF"
+          image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+        
+        <lightning-widget 
+        name="René Aaron"
+        address="reneaaron@getalby.com"
+        amount="21"
+        
+        accent="#ffc800"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+    
+        <lightning-widget 
+          name="René Aaron"
+          address="reneaaron@getalby.com"
+          amount="21"
+          accent="orange"
+          image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget> 
+  </div>
+  <div>
+    
+    <lightning-widget 
+    name="René Aaron"
+    address="reneaaron@getalby.com"
+    amount="21"
+    accent="#45D2FF"
+    image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+  </div>
+  <div>
     <lightning-widget 
       name="René Aaron"
       address="reneaaron@getalby.com"
@@ -43,6 +135,5 @@
       image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g">
     </lightning-widget>
   </div>
-
   </body>
 </html>

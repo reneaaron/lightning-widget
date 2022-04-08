@@ -1,6 +1,7 @@
 import { defineCustomElement } from 'vue'
-import LightningWidget from './components/LightningWidget.ce.vue'
 
-const LightningWidgetElement = defineCustomElement(LightningWidget)
+import Widget from './components/Widget.ce.vue'
+
+const LightningWidgetElement = defineCustomElement(Widget)
 
 customElements.define('lightning-widget', LightningWidgetElement)
