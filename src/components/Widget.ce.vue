@@ -34,104 +34,106 @@
       </a>
     </div>
     <div class="card">
-      <div v-if="step == 'start'">
-        <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
-        <div>
-          <h3>{{ name }}</h3>
+      <Transition name="fade">
+        <div v-if="step == 'start'">
+          <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
+          <div>
+            <h3>{{ name }}</h3>
+          </div>
+          <div>
+            <button type="button" class="button" @click="step = 'amount'">Donate sats</button>
+          </div>
         </div>
-        <div>
-          <button type="button" class="button" @click="step = 'amount'">Donate sats</button>
+        <div v-else-if="step == 'amount'">
+          <div>
+            <h3>How many sats?</h3>
+          </div>
+          <div class="mb-1">
+              <div style="display: flex; flex-direction: row; justify-content: center">
+                <div class="pill" @click="currentAmount=10">10</div>
+                <div class="pill" @click="currentAmount=100">100</div>
+                <div class="pill" @click="currentAmount=1000">1.000</div>
+              </div>
+              <input
+                type="number"
+                class="mb-1"
+                name="amount"
+                placeholder="Enter an amount"
+                required
+                v-model.number="currentAmount"
+              />
+          </div>
+          <div>
+            <button type="button" class="button" @click="step = 'note'">Next</button>
+          </div>
         </div>
-      </div>
-      <div v-if="step == 'amount'">
-        <div>
-          <h3>How many sats?</h3>
+        <div v-else-if="step == 'note'">
+            <h3>Want to add a note?</h3>
+            <textarea id="comment" class="mb-2" name="comment" placeholder="Enter your note" rows="4" v-model="comment"></textarea>
+            <button type="button" class="button" @click="step = 'pay'; pay()">Next</button>
         </div>
-        <div class="mb-1">
-            <div style="display: flex; flex-direction: row; justify-content: center">
-              <div class="pill" @click="currentAmount=10">10</div>
-              <div class="pill" @click="currentAmount=100">100</div>
-              <div class="pill" @click="currentAmount=1000">1.000</div>
-            </div>
-            <input
-              type="number"
-              class="mb-1"
-              name="amount"
-              placeholder="Enter an amount"
-              required
-              v-model.number="currentAmount"
-            />
-        </div>
-        <div>
-          <button type="button" class="button" @click="step = 'note'">Next</button>
-        </div>
-      </div>
-      <div v-if="step == 'note'">
-          <h3>Want to add a note?</h3>
-          <textarea id="comment" class="mb-2" name="comment" placeholder="Enter your note" rows="4" v-model="comment"></textarea>
-          <button type="button" class="button" @click="step = 'pay'; pay()">Next</button>
-      </div>
-      <div v-if="step == 'pay'">
-          <svg width="80" height="80" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                  <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                      <stop stop-color="#fff" stop-opacity="0" offset="0%"/>
-                      <stop stop-color="#fff" stop-opacity=".631" offset="63.146%"/>
-                      <stop stop-color="#fff" offset="100%"/>
-                  </linearGradient>
-              </defs>
-              <g fill="none" fill-rule="evenodd">
-                  <g transform="translate(1 1)">
-                      <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
-                          <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"/>
-                      </path>
-                      <circle fill="#fff" cx="36" cy="18" r="1">
-                          <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"/>
-                      </circle>
-                  </g>
-              </g>
-          </svg>
-          <h3 class="mb-2" style="text-align: center;">Waiting for payment with your browser wallet...</h3>
-          <a href="#" @click="step = 'qr'">
-            <svg style="vertical-align: top" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
-              <rect x="13.2499" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
-              <rect x="3.75" y="13.25" width="3" height="3" stroke="white" stroke-width="1.5"/>
-              <rect x="3" y="9.25" width="1.5" height="1.5" fill="white"/>
-              <rect x="6" y="9.25" width="1.5" height="1.5" fill="white"/>
-              <rect x="9.16663" y="9.25" width="1.5" height="1.5" fill="white"/>
-              <rect x="9.16663" y="12.375" width="1.5" height="1.5" fill="white"/>
-              <rect x="9.16663" y="15.5" width="1.5" height="1.5" fill="white"/>
-              <rect x="9.16663" y="6.125" width="1.5" height="1.5" fill="white"/>
-              <rect x="9.16663" y="3" width="1.5" height="1.5" fill="white"/>
-              <rect x="12.3333" y="9.25" width="1.5" height="1.5" fill="white"/>
-              <rect x="15.4999" y="9.25" width="1.5" height="1.5" fill="white"/>
-              <rect x="12.3333" y="12.375" width="1.5" height="1.5" fill="white"/>
-              <rect x="15.4999" y="12.375" width="1.5" height="1.5" fill="white"/>
-              <rect x="12.3333" y="15.5" width="1.5" height="1.5" fill="white"/>
-              <rect x="15.4999" y="15.5" width="1.5" height="1.5" fill="white"/>
+        <div v-else-if="step == 'pay'">
+            <svg width="80" height="80" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                        <stop stop-color="#fff" stop-opacity="0" offset="0%"/>
+                        <stop stop-color="#fff" stop-opacity=".631" offset="63.146%"/>
+                        <stop stop-color="#fff" offset="100%"/>
+                    </linearGradient>
+                </defs>
+                <g fill="none" fill-rule="evenodd">
+                    <g transform="translate(1 1)">
+                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
+                            <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"/>
+                        </path>
+                        <circle fill="#fff" cx="36" cy="18" r="1">
+                            <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"/>
+                        </circle>
+                    </g>
+                </g>
             </svg>
-            Use QR code
-          </a>
-      </div>
-      <div v-if="step == 'qr'">
-          <div class="mb-1">
-            <a :href="'lightning:' + paymentRequest">
-              <img class="qr" width="150" height="150" :src="'https://embed.twentyuno.net/qr/' +  paymentRequest" alt="qr" />
+            <h3 class="mb-2" style="text-align: center;">Waiting for payment with your browser wallet...</h3>
+            <a href="#" @click="step = 'qr'">
+              <svg style="vertical-align: top" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
+                <rect x="13.2499" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
+                <rect x="3.75" y="13.25" width="3" height="3" stroke="white" stroke-width="1.5"/>
+                <rect x="3" y="9.25" width="1.5" height="1.5" fill="white"/>
+                <rect x="6" y="9.25" width="1.5" height="1.5" fill="white"/>
+                <rect x="9.16663" y="9.25" width="1.5" height="1.5" fill="white"/>
+                <rect x="9.16663" y="12.375" width="1.5" height="1.5" fill="white"/>
+                <rect x="9.16663" y="15.5" width="1.5" height="1.5" fill="white"/>
+                <rect x="9.16663" y="6.125" width="1.5" height="1.5" fill="white"/>
+                <rect x="9.16663" y="3" width="1.5" height="1.5" fill="white"/>
+                <rect x="12.3333" y="9.25" width="1.5" height="1.5" fill="white"/>
+                <rect x="15.4999" y="9.25" width="1.5" height="1.5" fill="white"/>
+                <rect x="12.3333" y="12.375" width="1.5" height="1.5" fill="white"/>
+                <rect x="15.4999" y="12.375" width="1.5" height="1.5" fill="white"/>
+                <rect x="12.3333" y="15.5" width="1.5" height="1.5" fill="white"/>
+                <rect x="15.4999" y="15.5" width="1.5" height="1.5" fill="white"/>
+              </svg>
+              Use QR code
             </a>
-          </div>
-          <!--<input class="mb-1" type="text" :value="paymentRequest" readonly />-->
-          <h2 style="text-align: center; margin: 0;" @click="step = 'thankyou'">Scan to pay</h2>
-      </div>
-        <div v-if="step == 'thankyou'">
-          <div class="mb-1">
-            <img v-if="image" class="image" :src="image" alt="" />        
-          </div>
-          <!--<input class="mb-1" type="text" :value="paymentRequest" readonly />-->
-          <h2 style="text-align: center; margin: 0;">Thank you!</h2>
+        </div>
+        <div v-else-if="step == 'qr'">
+            <div class="mb-1">
+              <a :href="'lightning:' + paymentRequest">
+                <img class="qr" width="150" height="150" :src="'https://embed.twentyuno.net/qr/' +  paymentRequest" alt="qr" />
+              </a>
+            </div>
+            <!--<input class="mb-1" type="text" :value="paymentRequest" readonly />-->
+            <h2 style="text-align: center; margin: 0;" @click="step = 'thankyou'">Scan to pay</h2>
+        </div>
+          <div v-else-if="step == 'thankyou'">
+            <div class="mb-1">
+              <img v-if="image" class="image" :src="image" alt="" />        
+            </div>
+            <!--<input class="mb-1" type="text" :value="paymentRequest" readonly />-->
+            <h2 style="text-align: center; margin: 0;">Thank you!</h2>
+        </div>
+        </Transition>
       </div>
     </div>
-  </div>
   <!-- <div class="card" v-cloak>
     <img ng-if="image" class="rounded" :src="image" alt="" />
     <div class="content">
@@ -334,10 +336,22 @@ export default {
   font-family: "Inter", sans-serif;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transform: translateX(0);
+  transition: all 0.3s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  transform: translateX(-100%);
+}
+
 #root {
   position: relative;
   min-width: 330px;
   width: 100%;
+  overflow: hidden;
 }
 
 .card {
