@@ -34,7 +34,7 @@
       </a>
     </div>
     <div class="card">
-      <Transition name="fade">
+      <Transition name="fade" mode="out-in">
         <div v-if="step == 'start'">
           <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
           <div>
@@ -49,7 +49,7 @@
             <h3>How many sats?</h3>
           </div>
           <div class="mb-1">
-              <div style="display: flex; flex-direction: row; justify-content: center">
+              <div class="pill-container">
                 <div class="pill" @click="currentAmount=10">10</div>
                 <div class="pill" @click="currentAmount=100">100</div>
                 <div class="pill" @click="currentAmount=1000">1.000</div>
@@ -64,7 +64,7 @@
               />
           </div>
           <div>
-            <button type="button" class="button" @click="step = 'note'">Next</button>
+            <button type="button" class="button" @click="currentAmount > 0 ? step = 'note' : ''">Next</button>
           </div>
         </div>
         <div v-else-if="step == 'note'">
@@ -93,7 +93,7 @@
                 </g>
             </svg>
             <h3 class="mb-2" style="text-align: center;">Waiting for payment with your browser wallet...</h3>
-            <a href="#" @click="step = 'qr'">
+            <a href="javascript:void(0)" @click="step = 'qr'">
               <svg style="vertical-align: top" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
                 <rect x="13.2499" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
@@ -134,79 +134,6 @@
         </Transition>
       </div>
     </div>
-  <!-- <div class="card" v-cloak>
-    <img ng-if="image" class="rounded" :src="image" alt="" />
-    <div class="content">
-      <h3>{{ name }}</h3>
-      <span class="fiat text-secondary">{{ address }}</span>
-    </div>
-    <div class="amount">
-      <div class="form-group">
-        <div class="input-group">
-
-          <div class="input-group-append">
-            <span class="input-group-text"> sats </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="right">
-      <button
-        type="button"
-        class="button"
-        @click="pay()"
-        v-bind:disabled="loading"
-      >
-        <img class="loading" v-if="loading" src="https://embed.twentyuno.net/assets/loading.svg" />
-        {{ !loading ? "⚡ Pay" : "Loading..." }}
-      </button>
-      <div class="text-secondary fiat center" v-if="fiat && fiatAmount">
-        <span>≈ {{ fiatAmount }} €</span>
-      </div>
-    </div>
-  </div>
-  <div class="powered-by text-secondary center">
-    Powered by
-    <a href="https://widgets.twentyuno.net" target="_blank" rel="noreferer noopener">
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 1000 1000"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style="vertical-align: middle"
-    >
-      <path
-        d="M734.996 365.822C735.163 402.397 729.869 438.926 719.176 474.179C705.521 519.191 683.391 561.042 654.102 597.533C647.681 605.534 640.915 613.277 633.82 620.739L434.558 820H820V434.558L751.95 502.608C753.904 497.05 755.739 491.443 757.453 485.791C776.906 421.662 780.244 353.726 767.17 288C764.214 273.137 760.439 258.491 755.875 244.125L1000 0V1000H0L494.151 505.762C531.551 471.484 555 422.23 555 367.5C555 263.947 471.053 180 367.5 180C263.947 180 180 263.947 180 367.5C180 471.053 263.947 555 367.5 555C374.99 555 382.377 554.561 389.637 553.707L233.528 709.816C96.8161 656.27 0 523.191 0 367.5C0 164.535 164.535 0 367.5 0C569.905 0 734.092 163.629 734.996 365.822Z"
-        fill="black"
-      /></svg
-    ></a>
-  </div>
-  <div class="popup" v-if="popup" @click="popup = false">
-    <div class="popup-content" @click.stop>
-      <div class="popup-close"  @click="popup = false">
-          <img src="https://embed.twentyuno.net/assets/close.svg" width="32" height="32" />
-      </div>
-      <h2 class="title">No wallet found</h2>
-      <p>
-        We couldn't find a native WebLN wallet within your browser. Continue
-        using one of the following options below:
-      </p>
-      <p class="center">
-        <a href="https://getalby.com" class="btn">Download Alby</a>
-      </p>
-      <div class="center">
-        or use an external wallet 
-        <div v-if="popup && paymentRequest">
-          <img :src="'https://embed.twentyuno.net/qr/' +  paymentRequest" alt="qr" />
-          <input type="text" :value="paymentRequest" readonly />
-        </div>
-        <div v-else>
-          Loading...
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 <script>
 
@@ -237,7 +164,7 @@ export default {
     name: { type: String, required: true },
     address: { type: String, required: true },
     image: { type: String, required: true },
-    amount: { type: Number, default: 21 },
+    amount: { type: Number, default: null },
     fiat: { type: String, default: null },
     accent: { type: String, default: null },
     initialStep: { type: String, default: 'start' },
@@ -338,18 +265,17 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transform: translateX(0);
-  transition: all 0.3s ease-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  transform: translateX(-100%);
+  opacity: 0;
 }
 
 #root {
   position: relative;
-  min-width: 330px;
+  min-width: 350px;
   width: 100%;
   overflow: hidden;
 }
@@ -442,6 +368,7 @@ input {
   font-weight: bold;
   outline: none;
   font-size: 16px;
+  max-width: 200px;
 }
 
 input[type='number'] {
@@ -475,6 +402,12 @@ a, a:visited, a:active, a:hover {
 .pill:hover {
   color: var(--accent);
   background: #FFF;
+}
+
+.pill-container {
+  display: flex; 
+  flex-direction: row; 
+  justify-content: center;
 }
 
 .back {
