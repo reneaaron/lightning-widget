@@ -41,7 +41,7 @@
             <h3>{{ name }}</h3>
           </div>
           <div>
-            <button type="button" class="button" @click="step = 'amount'">Donate sats</button>
+            <button type="button" class="button" @click="step = 'amount'">{{ buttonText }}</button>
           </div>
         </div>
         <div v-else-if="step == 'amount'">
@@ -167,7 +167,8 @@ export default {
     amount: { type: Number, default: null },
     fiat: { type: String, default: null },
     accent: { type: String, default: null },
-    initialStep: { type: String, default: 'start' },
+    initialStep: { type: String, default: 'start' },    
+    buttonText: { type: String, default: 'Donate sats' },
   },
   data() {
     return {
