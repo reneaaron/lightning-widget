@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>⚡ Widgets</title>
+    <style>
+      body {
+        font-family: "Inter", Helvetica, sans-serif;
+        background: #FFF;
+        padding: 1em;
+      }
+      .small {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      [v-cloak] {
+        display: none !important;
+      }
+      lightning-widget {
+        margin: 1em;
+        flex: 1 1 0px;
+        width: 0;
+      }
+    </style>
+    <script src="/js/app.js"></script>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <h1>Widget states (default)</h1><br>
+    <div class="small">
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        initial-step="amount"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        initial-step="note"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        initial-step="pay"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        initial-step="qr"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#20C997"
+        initial-step="thankyou"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+    </div>
+
+    <h1>Widget states (light)</h1>
+    <div class="small">
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        initial-step="amount"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        initial-step="note"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        initial-step="pay"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        initial-step="qr"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+      <lightning-widget 
+        name="René Aaron"
+        to="reneaaron@getalby.com"
+        accent="#EFEFEF"
+        initial-step="thankyou"
+        image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+    </div>
+
+  <h1>Wide layout</h1>
+  <lightning-widget 
+    name="René Aaron"
+    to="reneaaron@getalby.com"
+    accent="#20C997"
+    image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+
+  <h1>Advanced configuration options</h1>
+  <lightning-widget 
+    name="René Aaron"
+    to="reneaaron@getalby.com"
+    amount="21"
+    accent="#000"
+    button-text="🤑 Send me money!!!"
+    background-image="https://pbs.twimg.com/profile_banners/1498337723886747648/1646251348/1500x500"
+    image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+
+  <h1>LNURL</h1>  
+  <lightning-widget 
+    name="LNURL"
+    to="lnurl1dp68gurn8ghj7em9w3skccne9e3k7mf09emk2mrv944kummhdchkcmn4wfk8qtmjv4hx2ctpwfhku42dkf0"
+    accent="#20C997"
+    image="https://secure.gravatar.com/avatar/07e22939e7672b38c56615068c4c715f?size=200&default=mm&rating=g"></lightning-widget>
+  
+  </body>
+</html>
