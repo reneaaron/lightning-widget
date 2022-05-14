@@ -132,7 +132,7 @@
               <h3>Thank you</h3>
             </div>
             <div>
-              <button class="button" @click="step = 'start'">Start over</button>
+              <button class="button" @click="reset(); step = 'start'">Start over</button>
             </div>
         </div>
         <div v-else-if="step == 'error'">
@@ -140,7 +140,7 @@
           <p class="mb-2">
             An error happend during the payment. Try again? 
           </p>
-          <button class="button" @click="step = 'start'">Start over</button>
+          <button class="button" @click="reset(); step = 'start'">Start over</button>
         </div>
         </Transition>
       </div>
@@ -172,7 +172,6 @@ export default {
     return {
       currentAmount: this.amount,
       loading: false,
-      popup: false,
       paymentRequest: null,
       step: this.initialStep,
       comment: '',
@@ -267,6 +266,11 @@ export default {
             this.color
           ],
       });
+    },
+    reset: function() {
+      this.comment = '';
+      this.currentAmount = null;
+      this.paymentRequest = null;
     }
   },
 };
