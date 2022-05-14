@@ -93,7 +93,7 @@
                 </g>
             </svg>
             <h4 class="mb-2">Waiting for payment with your browser wallet...</h4>
-            <a href="javascript:void(0)" @click="showQR()">
+            <a href="javascript:void(0)" @click="showQR()" v-if="paymentType == 'Invoice'">
               <svg style="vertical-align: middle" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect class="map-stroke-color" x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
                 <rect class="map-stroke-color" t x="13.2499" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
@@ -136,9 +136,8 @@
             </div>
         </div>
         <div v-else-if="step == 'error'">
-          <h3 style="margin-bottom: 0">Sorry</h3>
-          <p class="mb-2">
-            An error happend during the payment. Try again? 
+          <h3 style="margin-bottom: 0">{{errorTitle}}</h3>
+          <p class="mb-2" v-html="errorMessage">
           </p>
           <button class="button" @click="reset(); step = 'start'">Start over</button>
         </div>
@@ -176,6 +175,9 @@ export default {
       step: this.initialStep,
       comment: '',
       qrTimeoutElapsed: false,
+      paymentType: 'Invoice',
+      errorTitle: 'Sorry',
+      errorMessage: 'An error happend during the payment. Try again?'
     };
   },
   computed: {
@@ -201,9 +203,52 @@ export default {
     fontImport.setAttribute("type", "text/css");
     
     document.head.appendChild(fontImport);
+
+    // Keysend payments
+    if(this.to.match(/^[0-9a-fA-F]{66}$/i)) {
+      this.paymentType = "Keysend";
+    }
   },
   methods: {
-    pay: async function () {
+    pay: async function() {
+      await this['pay' + this.paymentType]();
+    },
+    payKeysend: async function() {
+      let error = false;
+
+      try {
+        this.loading = true;
+        
+        if (window.webln) {
+          await window.webln.enable();
+          await window.webln.keysend({
+              destination: this.to, 
+              amount: this.currentAmount,
+              customRecords: { 
+                  // https://docs.lightning.engineering/lightning-network-tools/lnd/send-messages-with-keysend
+                  34349334: this.comment 
+              }
+          });
+
+          this.step = 'thankyou';
+          this.celebrate();
+
+        } else {
+          error = true;
+        }
+      } catch (e) {
+        error = true;
+      } finally {
+        this.loading = false;
+      }
+
+      if(error) {
+        this.errorTitle = "No wallet available"
+        this.errorMessage = `You first need to install a browser extension.<br><br><a class="text-link" href="https://www.getalby.com" target="_blank" rel="noopener noreferrer">Learn more</a>`;
+        this.step = 'error';
+      }
+    },
+    payInvoice: async function () {
       let webln;
       let error = false;
 
@@ -276,7 +321,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 
 /* Reset CSS */
 abbr,address,article,aside,audio,b,blockquote,body,canvas,caption,cite,code,dd,del,details,dfn,div,dl,dt,em,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,p,pre,q,samp,section,small,span,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,ul,var,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:"";content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent}ins{text-decoration:none}ins,mark{background-color:#ff9;color:#000}mark{font-style:italic;font-weight:700}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}input,select{vertical-align:middle}
@@ -481,6 +526,11 @@ h4 {
 p {
   margin: 1em 0;
   line-height: 1.5em;
+}
+
+a.text-link, a.text-link:hover, a.text-link:visited, a.text-link:active {
+  color: var(--color);
+  text-decoration: underline;
 }
 
 /* Conditional SVG fill / stroke colors */ 
