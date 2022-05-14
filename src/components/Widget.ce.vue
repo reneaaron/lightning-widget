@@ -93,7 +93,7 @@
                 </g>
             </svg>
             <h4 class="mb-2">Waiting for payment with your browser wallet...</h4>
-            <a href="javascript:void(0)" @click="step = 'qr'">
+            <a href="javascript:void(0)" @click="showQR()">
               <svg style="vertical-align: middle" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect class="map-stroke-color" x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
                 <rect class="map-stroke-color" t x="13.2499" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5"/>
@@ -121,7 +121,10 @@
               <img class="qr" width="150" height="150" :src="'https://embed.twentyuno.net/qr/' +  paymentRequest" alt="qr" />
             </a>
           </div>
-          <h3 style="text-align: center; margin: 0;" @click="step = 'thankyou'">Scan to pay</h3>
+          <Transition name="fade" mode="out-in">
+            <h3 class="qr-heading" v-if="!qrTimeoutElapsed" >Scan to pay</h3>
+            <button v-else class="button" @click="step = 'thankyou'; celebrate()">Done?</button>
+          </Transition>
         </div>
           <div v-else-if="step == 'thankyou'">
             <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
@@ -129,7 +132,7 @@
               <h3>Thank you</h3>
             </div>
             <div>
-              <button class="button" @click="this.step = 'start'">Start over</button>
+              <button class="button" @click="step = 'start'">Start over</button>
             </div>
         </div>
         <div v-else-if="step == 'error'">
@@ -137,7 +140,7 @@
           <p class="mb-2">
             An error happend during the payment. Try again? 
           </p>
-          <button class="button" @click="this.step = 'start'">Start over</button>
+          <button class="button" @click="step = 'start'">Start over</button>
         </div>
         </Transition>
       </div>
@@ -173,6 +176,7 @@ export default {
       paymentRequest: null,
       step: this.initialStep,
       comment: '',
+      qrTimeoutElapsed: false,
     };
   },
   computed: {
@@ -202,9 +206,10 @@ export default {
   methods: {
     pay: async function () {
       let webln;
+      let error = false;
+
       try {
         this.loading = true;
-
         let invoice;
         
         // Fetch invoice
@@ -223,22 +228,25 @@ export default {
           await webln.sendPayment(invoice.payment_request);
 
           this.step = 'thankyou';
-          const canvas = this.$refs["confetti"];
-          const jsConfetti = new JSConfetti({ canvas });
-          jsConfetti.addConfetti({
-            confettiColors: [
-                this.color
-              ],
-          });
+          this.celebrate();
 
         } else {
-          this.step = 'qr';
+          error = true;
         }
       } catch (e) {
-        this.step = 'qr';
+        error = true;
       } finally {
         this.loading = false;
       }
+
+      if(error) {
+        this.showQR();
+      }
+    },
+    showQR: function() {
+      this.qrTimeoutElapsed = false;
+      this.step = 'qr';
+      setTimeout(() => { this.qrTimeoutElapsed = true; }, 3000);
     },
     back: function() {
       const steps = [
@@ -250,6 +258,15 @@ export default {
       ];
 
       this.step = steps[steps.indexOf(this.step)-1];
+    },
+    celebrate: function() {
+      const canvas = this.$refs["confetti"];
+      const jsConfetti = new JSConfetti({ canvas });
+      jsConfetti.addConfetti({
+        confettiColors: [
+            this.color
+          ],
+      });
     }
   },
 };
@@ -470,4 +487,10 @@ p {
 .map-fill-color {
   fill: var(--color);
 }
+
+.qr-heading {
+  text-align: center; 
+  margin: 0;
+}
+
 </style>
