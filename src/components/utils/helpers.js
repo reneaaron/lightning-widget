@@ -1,4 +1,4 @@
-const host = "https://embed.twentyuno.net";
+const host = "http://localhost:3002";
 
 function contrastingColor(color)
 {
