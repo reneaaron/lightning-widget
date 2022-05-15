@@ -36,8 +36,24 @@ async function fetchInvoice(to, amount, comment) {
   return invoice.json();
 }
 
+async function fetchParams(to) {
+  const params = await fetch(host + "/params", {
+    method: "POST",
+    body: JSON.stringify({
+      to: to
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  return params.json();
+}
+
 module.exports = {
   fetchInvoice: fetchInvoice,
   luma: luma,
-  contrastingColor: contrastingColor
+  contrastingColor: contrastingColor,
+  fetchParams: fetchParams,
 }
