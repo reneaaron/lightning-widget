@@ -15,6 +15,7 @@ app.use('/assets', express.static(path.join(__dirname, '../../assets')))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors())
+app.options('*', cors())
 
 app.post("/invoice", async function (req, res) {
     const { invoice } = await lnurlPay.requestInvoice({
