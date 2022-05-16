@@ -210,8 +210,7 @@ export default {
     if(this.to.match(/^[0-9a-fA-F]{66}$/i)) {
       this.paymentType = "Keysend";
     }
-
-    if(this.debug) {
+    else if(this.debug) {
       this.params = await fetchParams(this.to);
       if(this.params.min > 10 || this.params.max < 1000) {
         this.errorTitle = "Configuration error";
