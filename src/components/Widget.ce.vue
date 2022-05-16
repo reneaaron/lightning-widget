@@ -178,8 +178,8 @@ export default {
       comment: '',
       qrTimeoutElapsed: false,
       paymentType: 'Invoice',
-      errorTitle: 'Sorry',
-      errorMessage: 'An error happend during the payment. Try again?'
+      errorTitle: '',
+      errorMessage: '',
     };
   },
   computed: {
@@ -211,20 +211,27 @@ export default {
       this.paymentType = "Keysend";
     }
     else if(this.debug) {
-      this.params = await fetchParams(this.to);
-      if(this.params.min > 10 || this.params.max < 1000) {
-        this.errorTitle = "Configuration error";
-        this.errorMessage = `Please make sure the LNURL you provided allows payments between 10 and 1000 sats.`;
-        this.step = 'error';
+      try {
+        this.params = await fetchParams(this.to);
+        console.log(this.params, this.to);
+        if(this.params.min > 10 || this.params.max < 1000) {
+          this.error("Configuration error", `Please make sure the LNURL you provided allows payments between 10 and 1000 sats. (min: ${this.params.min}, max: ${this.params.max})`);
+        }
+        else if (!this.params.commentAllowed || this.params.commentAllowed < 100) {
+          this.error("Configuration error", "Please make sure the LNURL you provided allows comments of at least 100 characters in length.");
+        }
       }
-      else if (!this.params.commentAllowed || this.params.commentAllowed < 100) {
-        this.errorTitle = "Configuration error"
-        this.errorMessage = `Please make sure the LNURL you provided allows comments of at least 100 characters in length.`;
-        this.step = 'error';
+      catch(e) {
+        this.error("Configuration error", "Are you sure this is a valid lightning address or LNURL?");
       }
     }
   },
   methods: {
+    error: function(title, message) {
+      this.errorTitle = title;
+      this.errorMessage = message;
+      this.step = 'error';
+    },
     pay: async function() {
       await this['pay' + this.paymentType]();
     },
@@ -258,9 +265,7 @@ export default {
       }
 
       if(error) {
-        this.errorTitle = "No wallet available"
-        this.errorMessage = `You first need to install a browser extension.<br><br><a class="text-link" href="https://www.getalby.com" target="_blank" rel="noopener noreferrer">Learn more</a>`;
-        this.step = 'error';
+        this.error("No wallet available", `You first need to install a browser extension.<br><br><a class="text-link" href="https://www.getalby.com" target="_blank" rel="noopener noreferrer">Learn more</a>`);
       }
     },
     payInvoice: async function () {
@@ -277,7 +282,8 @@ export default {
           this.paymentRequest = invoice.payment_request;
         }
         catch(e) {
-          this.step = 'error';
+          this.error('Sorry', 'An error happend during the payment. Try again?');
+          this.loading = false;
           return;
         }
 

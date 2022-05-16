@@ -20,25 +20,33 @@ function hexToRGB(color)
 }
 
 async function fetchInvoice(to, amount, comment) {
-  const invoice = await fetch(host + `/invoice?to=${to}&amount=${amount}&comment=${comment}`, {
+  const response = await fetch(host + `/invoice?to=${to}&amount=${amount}&comment=${comment}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
   });
 
-  return invoice.json();
+  if(!response.ok) {
+    throw new Error(response.error);
+  }
+
+  return response.json();
 }
 
 async function fetchParams(to) {
-  const params = await fetch(host + `/params?to=${to}`, {
+  const response = await fetch(host + `/params?to=${to}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
   });
 
-  return params.json();
+  if(!response.ok) {
+    throw new Error(response.error);
+  }
+
+  return response.json();
 }
 
 module.exports = {
