@@ -11,6 +11,7 @@ Start accepting Bitcoin payments on your website in minutes. Beautiful widgets, 
  - `to`: Where the payments should be sent to ([Lightning Address](https://lightningaddress.com/) or [LNURL](https://github.com/fiatjaf/lnurl-rfc))
  - `accent`: An accent color in RGB format to make your widget more colorful (i.e. `#20C997`)
  - `button-text`: The text to be displayed on the initial state of the widget (default: `Donate sats`)
+ - `debug`: Debug mode, validates settings during initialization and displays configuration errors
 
 **Example**
 ```
