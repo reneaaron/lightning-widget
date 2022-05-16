@@ -122,7 +122,7 @@
             </a>
           </div>
           <Transition name="fade" mode="out-in">
-            <h3 class="qr-heading" v-if="!qrTimeoutElapsed" >Scan to pay</h3>
+            <h4 class="qr-heading" v-if="!qrTimeoutElapsed" >Scan or Click to pay</h4>
             <button v-else class="button" @click="step = 'thankyou'; celebrate()">Done?</button>
           </Transition>
         </div>
