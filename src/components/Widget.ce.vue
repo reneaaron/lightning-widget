@@ -122,7 +122,7 @@
             </a>
           </div>
           <Transition name="fade" mode="out-in">
-            <h3 class="qr-heading" v-if="!qrTimeoutElapsed" >Scan to pay</h3>
+            <h4 class="qr-heading" v-if="!qrTimeoutElapsed" >Scan or Click to pay</h4>
             <button v-else class="button" @click="step = 'thankyou'; celebrate()">Done?</button>
           </Transition>
         </div>
@@ -147,7 +147,7 @@
 </template>
 <script>
 import JSConfetti from 'js-confetti'
-import { fetchInvoice, contrastingColor, luma } from './utils/helpers';
+import { fetchInvoice, fetchParams, contrastingColor, luma } from './utils/helpers';
 
 export default {
   name: "LightningWidget",
@@ -165,11 +165,13 @@ export default {
     address: { type: String, required: false, default: "reneaaron@getalby.com" },
 
     // Debugging purposes only 
+    debug: { type: Boolean, default: false },    
     initialStep: { type: String, default: 'start' },    
   },
   data() {
     return {
       currentAmount: this.amount,
+      params: {},
       loading: false,
       paymentRequest: null,
       step: this.initialStep,
@@ -195,7 +197,7 @@ export default {
       return this.backgroundImage ? { 'background-image' : `url('${this.backgroundImage}')` } : {};
     }
   },
-  mounted() {
+  async mounted() {
     // Install fonts (do need to be included outside of the shadow dom)
     const fontImport = document.createElement("link");
     fontImport.setAttribute("href",  "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
@@ -207,6 +209,20 @@ export default {
     // Keysend payments
     if(this.to.match(/^[0-9a-fA-F]{66}$/i)) {
       this.paymentType = "Keysend";
+    }
+
+    if(this.debug) {
+      this.params = await fetchParams(this.to);
+      if(this.params.min > 10 || this.params.max < 1000) {
+        this.errorTitle = "Configuration error";
+        this.errorMessage = `Please make sure the LNURL you provided allows payments between 10 and 1000 sats.`;
+        this.step = 'error';
+      }
+      else if (!this.params.commentAllowed || this.params.commentAllowed < 100) {
+        this.errorTitle = "Configuration error"
+        this.errorMessage = `Please make sure the LNURL you provided allows comments of at least 100 characters in length.`;
+        this.step = 'error';
+      }
     }
   },
   methods: {
