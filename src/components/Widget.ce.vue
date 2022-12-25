@@ -213,7 +213,6 @@ export default {
     else if(this.debug) {
       try {
         this.params = await fetchParams(this.to);
-        console.log(this.params, this.to);
         if(this.params.min > 10 || this.params.max < 1000) {
           this.error("Configuration error", `Please make sure the LNURL you provided allows payments between 10 and 1000 sats. (min: ${this.params.min}, max: ${this.params.max})`);
         }
