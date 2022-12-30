@@ -49,9 +49,18 @@ async function fetchParams(to) {
   return response.json();
 }
 
+const formatAmount = (amount, decimals = 1) => {
+  let i = 0;
+  for (i; amount >= 1000; i++) {
+    amount /= 1000;
+  }
+  return Number.parseFloat(amount).toFixed(i > 0 ? decimals : 0) + ["", "k", "M", "G"][i];
+}
+
 module.exports = {
-  fetchInvoice: fetchInvoice,
-  luma: luma,
-  contrastingColor: contrastingColor,
-  fetchParams: fetchParams,
+  fetchInvoice,
+  luma,
+  contrastingColor,
+  fetchParams,
+  formatAmount
 }

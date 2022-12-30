@@ -50,9 +50,7 @@
           </div>
           <div class="mb-1">
               <div class="pill-container">
-                <div class="pill" @click="currentAmount=10">10</div>
-                <div class="pill" @click="currentAmount=100">100</div>
-                <div class="pill" @click="currentAmount=1000">1,000</div>
+                <div class="pill" v-bind:key="item.amount" v-for="item in amountList" @click="currentAmount=item.amount">{{ item.label }}</div>
               </div>
               <input
                 type="number"
@@ -147,7 +145,7 @@
 </template>
 <script>
 import JSConfetti from 'js-confetti'
-import { fetchInvoice, fetchParams, contrastingColor, luma } from './utils/helpers';
+import { fetchInvoice, fetchParams, contrastingColor, luma, formatAmount } from './utils/helpers';
 
 export default {
   name: "LightningWidget",
@@ -155,6 +153,9 @@ export default {
     name: { type: String, required: true },
     to: { type: String, required: true, default: "reneaaron@getalby.com" },
     
+    amounts: { type: String, required: false, default: "10,100,1000" },
+    labels: { type: String, required: false },
+
     // Style
     image: { type: String, required: true },
     accent: { type: String, default: '#20C997' },
@@ -180,6 +181,7 @@ export default {
       paymentType: 'Invoice',
       errorTitle: '',
       errorMessage: '',
+      amountList: [],
     };
   },
   computed: {
@@ -198,6 +200,14 @@ export default {
     }
   },
   async mounted() {
+    const labels = this.labels ? this.labels.split(",") : [];
+    this.amountList = this.amounts.split(",").slice(0, 3).map((x, i) => { 
+      return { 
+        label: labels[i] ?? formatAmount(parseInt(x), 0),
+        amount: parseInt(x)
+      };
+    });
+    
     // Install fonts (do need to be included outside of the shadow dom)
     const fontImport = document.createElement("link");
     fontImport.setAttribute("href",  "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
@@ -213,8 +223,10 @@ export default {
     else if(this.debug) {
       try {
         this.params = await fetchParams(this.to);
-        if(this.params.min > 10 || this.params.max < 1000) {
-          this.error("Configuration error", `Please make sure the LNURL you provided allows payments between 10 and 1000 sats. (min: ${this.params.min}, max: ${this.params.max})`);
+        const minAmount = this.amountList.reduce((a,b) => Math.max(a.amount, b.amount));
+        const maxAmount = this.amountList.reduce((a,b) => Math.min(a.amount, b.amount));
+        if(this.params.min > minAmount || this.params.max < maxAmount) {
+          this.error("Configuration error", `Please make sure the LNURL you provided allows payments between ${minAmount} and ${maxAmount} sats. (min: ${this.params.min}, max: ${this.params.max})`);
         }
         else if (!this.params.commentAllowed || this.params.commentAllowed < 100) {
           this.error("Configuration error", "Please make sure the LNURL you provided allows comments of at least 100 characters in length.");
@@ -493,7 +505,7 @@ a, a:visited, a:active, a:hover {
   font-size: 17px;
   border: 1px solid var(--color);
   color: var(--color);
-  padding: 0.5em;
+  padding: 0.5em 1em;
   border-radius: 50px;
   flex-grow: 1;
   text-align: center;
