@@ -12,10 +12,7 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@babel/core": "^7.17.10",
-    "babel-eslint": "^10.1.0",
     "cors": "^2.8.5",
-    "eslint": "^8.14.0",
     "invoices": "^2.0.4",
     "js-confetti": "^0.10.2",
     "lnurl-pay": "^0.2.3",
@@ -26,6 +23,9 @@
     "vue-template-compiler": "^2.6.14"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "eslint": "^8.14.0",
+    "babel-eslint": "^10.1.0",
     "@babel/eslint-parser": "^7.17.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
