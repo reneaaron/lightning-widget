@@ -57,7 +57,7 @@
         <div v-else-if="step == 'note'">
           <h3>Want to add a note?</h3>
           <textarea id="comment" class="mb-1" name="comment" placeholder="Enter your note" rows="4"
-            v-model="comment" :maxlength="this.params.commentAllowed"></textarea>
+            v-model="comment" :maxlength="params.commentAllowed"></textarea>
           <button type="button" class="button" @click="step = 'pay'; pay()">Next</button>
         </div>
         <div v-else-if="step == 'pay'">
@@ -361,6 +361,8 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 /* Reset CSS */
 abbr,
 address,
@@ -526,8 +528,6 @@ input,
 select {
   vertical-align: middle
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 * {
   font-family: "Inter", sans-serif;

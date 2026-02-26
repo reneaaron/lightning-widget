@@ -2,36 +2,33 @@
   "name": "lightning-widget",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "run": "node src/server/main.js",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "serve": "vite",
+    "build": "vite build",
+    "run": "node src/server/main.cjs",
+    "lint": "eslint src"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "invoices": "^2.0.4",
-    "js-confetti": "^0.10.2",
-    "lnurl-pay": "^0.2.3",
-    "qrcode": "^1.5.0",
-    "stream": "^0.0.2",
-    "vue": "^3.2.32",
-    "vue-custom-element": "^3.3.0",
-    "vue-template-compiler": "^2.6.14"
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "invoices": "^5.0.2",
+    "js-confetti": "^0.13.1",
+    "lnurl-pay": "^5.0.2",
+    "qrcode": "^1.5.4",
+    "vue": "^3.5.29"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "eslint": "^8.14.0",
-    "babel-eslint": "^10.1.0",
-    "@babel/eslint-parser": "^7.17.0",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "@vue/compiler-sfc": "^3.2.31",
-    "eslint-plugin-vue": "^8.7.1",
-    "webpack-bundle-analyzer": "^4.5.0"
+    "@eslint/js": "^9.21.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/compiler-sfc": "^3.5.29",
+    "eslint": "^9.21.0",
+    "eslint-plugin-vue": "^10.0.2",
+    "vite": "^6.2.0",
+    "vite-plugin-css-injected-by-js": "^3.5.2"
   }
 }
