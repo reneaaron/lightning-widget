@@ -1,138 +1,106 @@
 <template>
   <div v-cloak id="root" :style="cssProps">
-    <canvas id="confetti" ref="confetti"></canvas>
-    <div class="logo">
-      <a href="https://widgets.twentyuno.net" target="_blank" rel="noreferer noopener">
-        <svg width="16" height="16" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg"
-          style="vertical-align: top">
-          <path class="map-fill-color"
-            d="M734.996 365.822C735.163 402.397 729.869 438.926 719.176 474.179C705.521 519.191 683.391 561.042 654.102 597.533C647.681 605.534 640.915 613.277 633.82 620.739L434.558 820H820V434.558L751.95 502.608C753.904 497.05 755.739 491.443 757.453 485.791C776.906 421.662 780.244 353.726 767.17 288C764.214 273.137 760.439 258.491 755.875 244.125L1000 0V1000H0L494.151 505.762C531.551 471.484 555 422.23 555 367.5C555 263.947 471.053 180 367.5 180C263.947 180 180 263.947 180 367.5C180 471.053 263.947 555 367.5 555C374.99 555 382.377 554.561 389.637 553.707L233.528 709.816C96.8161 656.27 0 523.191 0 367.5C0 164.535 164.535 0 367.5 0C569.905 0 734.092 163.629 734.996 365.822Z"
-            fill="#FFF" />
-        </svg></a>
-    </div>
-    <div class="back">
-      <a href="javascript:void(0)" @click="back()" v-if="step != 'start' && step != 'error' && step != 'thankyou'">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g clip-path="url(#clip0_27_452)">
-            <path class="inherit-textcolor"
-              d="M13.8994 6.99833e-10L4.70703 9.19239C4.3165 9.58291 4.3165 10.2161 4.70703 10.6066L13.8994 19.799"
-              stroke="white" stroke-width="2" stroke-linecap="round" />
-          </g>
-          <defs>
-            <clipPath id="clip0_27_452">
-              <rect width="20" height="20" fill="white" />
-            </clipPath>
-          </defs>
-        </svg>
-
-      </a>
-    </div>
     <div class="card" v-bind:style="backgroundImageStyle">
+      <canvas id="confetti" ref="confetti"></canvas>
+      <div class="toolbar">
+        <button type="button" class="icon-button" aria-label="Back" @click="back()"
+          v-if="step != 'start' && step != 'error' && step != 'thankyou'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="inherit-textcolor" d="M15 5l-7 7 7 7" stroke-width="2.25" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <span v-else></span>
+        <a class="logo" href="https://widgets.twentyuno.net" target="_blank" rel="noreferer noopener"
+          aria-label="Powered by twentyuno">
+          <svg width="14" height="14" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="map-fill-color"
+              d="M734.996 365.822C735.163 402.397 729.869 438.926 719.176 474.179C705.521 519.191 683.391 561.042 654.102 597.533C647.681 605.534 640.915 613.277 633.82 620.739L434.558 820H820V434.558L751.95 502.608C753.904 497.05 755.739 491.443 757.453 485.791C776.906 421.662 780.244 353.726 767.17 288C764.214 273.137 760.439 258.491 755.875 244.125L1000 0V1000H0L494.151 505.762C531.551 471.484 555 422.23 555 367.5C555 263.947 471.053 180 367.5 180C263.947 180 180 263.947 180 367.5C180 471.053 263.947 555 367.5 555C374.99 555 382.377 554.561 389.637 553.707L233.528 709.816C96.8161 656.27 0 523.191 0 367.5C0 164.535 164.535 0 367.5 0C569.905 0 734.092 163.629 734.996 365.822Z" />
+          </svg>
+        </a>
+      </div>
       <Transition name="fade" mode="out-in">
-        <div v-if="step == 'start'">
-          <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
-          <div>
-            <h3>{{ name }}</h3>
+        <div v-if="step == 'start'" class="step">
+          <img v-if="image" class="image" :src="image" width="120" height="120" :alt="name" />
+          <h3>{{ name }}</h3>
+          <div v-if="to.includes('@')" class="address">
+            <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path class="map-fill-color" d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+            </svg>
+            {{ to }}
           </div>
-          <div>
-            <button type="button" class="button" @click="showAmount()">{{ buttonText }}</button>
-          </div>
+          <button type="button" class="button" @click="showAmount()">{{ buttonText }}</button>
         </div>
-        <div v-else-if="step == 'amount'">
-          <div>
-            <h3>How many sats?</h3>
+        <div v-else-if="step == 'amount'" class="step">
+          <h3>How many sats?</h3>
+          <div class="pill-container">
+            <button type="button" class="pill" :class="{ active: currentAmount === item.amount }"
+              v-bind:key="item.amount" v-for="item in amountList" @click="currentAmount = item.amount">{{
+              item.label }}</button>
           </div>
-          <div class="mb-1">
-            <div class="pill-container">
-              <div class="pill" v-bind:key="item.amount" v-for="item in amountList" @click="currentAmount = item.amount">{{
-                item.label }}</div>
-            </div>
-            <input type="number" class="mb-1" name="amount" placeholder="Enter an amount" required
-              v-model.number="currentAmount" />
-          </div>
-          <div>
-            <button type="button" class="button" @click="showNote()">Next</button>
-          </div>
+          <label class="amount-input">
+            <input type="number" :class="{ 'has-suffix': currentAmount }" name="amount" placeholder="Enter an amount" required
+              v-model.number="currentAmount" @keyup.enter="showNote()" />
+            <span v-if="currentAmount" class="suffix">sats</span>
+          </label>
+          <button type="button" class="button" @click="showNote()">Next</button>
         </div>
-        <div v-else-if="step == 'note'">
+        <div v-else-if="step == 'note'" class="step">
           <h3>Want to add a note?</h3>
-          <textarea id="comment" class="mb-1" name="comment" placeholder="Enter your note" rows="4"
-            v-model="comment" :maxlength="params.commentAllowed"></textarea>
+          <div class="note">
+            <textarea id="comment" name="comment" placeholder="Enter your note" rows="3"
+              v-model="comment" :maxlength="params.commentAllowed"></textarea>
+            <span v-if="params.commentAllowed" class="counter">{{ comment.length }}/{{ params.commentAllowed }}</span>
+          </div>
           <button type="button" class="button" @click="step = 'pay'; pay()">Next</button>
         </div>
-        <div v-else-if="step == 'pay'">
-          <svg width="100" height="100" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                <stop :stop-color="color" stop-opacity="0" offset="0%" />
-                <stop :stop-color="color" stop-opacity=".631" offset="63.146%" />
-                <stop :stop-color="color" offset="100%" />
-              </linearGradient>
-            </defs>
-            <g fill="none" fill-rule="evenodd">
-              <g transform="translate(1 1)">
-                <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
-                  <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s"
-                    repeatCount="indefinite" />
-                </path>
-                <circle fill="#fff" cx="36" cy="18" r="1">
-                  <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s"
-                    repeatCount="indefinite" />
-                </circle>
-              </g>
-            </g>
-          </svg>
-          <h4 class="mb-2">Waiting for payment with your browser wallet...</h4>
-          <a href="javascript:void(0)" @click="showQR()" v-if="paymentType == 'Invoice'">
-            <svg style="vertical-align: middle" width="20" height="20" viewBox="0 0 20 20" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <rect class="map-stroke-color" x="3.75" y="3.75" width="3" height="3" stroke="white" stroke-width="1.5" />
-              <rect class="map-stroke-color" t x="13.2499" y="3.75" width="3" height="3" stroke="white"
-                stroke-width="1.5" />
-              <rect class="map-stroke-color" x="3.75" y="13.25" width="3" height="3" stroke="white" stroke-width="1.5" />
-              <rect class="map-fill-color" x="3" y="9.25" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="6" y="9.25" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="9.16663" y="9.25" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="9.16663" y="12.375" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="9.16663" y="15.5" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="9.16663" y="6.125" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="9.16663" y="3" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="12.3333" y="9.25" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="15.4999" y="9.25" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="12.3333" y="12.375" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="15.4999" y="12.375" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="12.3333" y="15.5" width="1.5" height="1.5" fill="white" />
-              <rect class="map-fill-color" x="15.4999" y="15.5" width="1.5" height="1.5" fill="white" />
+        <div v-else-if="step == 'pay'" class="step">
+          <div class="spinner">
+            <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path class="map-fill-color" d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+            </svg>
+          </div>
+          <h4>Waiting for payment with your browser wallet…</h4>
+          <button type="button" class="ghost-button" @click="showQR()" v-if="paymentType == 'Invoice'">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect class="map-stroke-color" x="3.75" y="3.75" width="3" height="3" stroke-width="1.5" />
+              <rect class="map-stroke-color" x="13.25" y="3.75" width="3" height="3" stroke-width="1.5" />
+              <rect class="map-stroke-color" x="3.75" y="13.25" width="3" height="3" stroke-width="1.5" />
+              <rect class="map-fill-color" x="9.25" y="9.25" width="1.5" height="1.5" />
+              <rect class="map-fill-color" x="13.25" y="13.25" width="3" height="3" />
+              <rect class="map-fill-color" x="9.25" y="3" width="1.5" height="4" />
+              <rect class="map-fill-color" x="3" y="9.25" width="4" height="1.5" />
+              <rect class="map-fill-color" x="9.25" y="13" width="1.5" height="4" />
             </svg>
             Use QR code
-          </a>
+          </button>
         </div>
-        <div v-else-if="step == 'qr'">
-          <div class="mb-1">
-            <a :href="'lightning:' + paymentRequest">
-              <img class="qr" width="150" height="150" :src="'https://embed.twentyuno.net/qr/' + paymentRequest"
-                alt="qr" />
-            </a>
-          </div>
+        <div v-else-if="step == 'qr'" class="step">
+          <a class="qr" :href="'lightning:' + paymentRequest">
+            <img width="150" height="150" :src="'https://embed.twentyuno.net/qr/' + paymentRequest" alt="qr" />
+          </a>
           <Transition name="fade" mode="out-in">
-            <h4 class="qr-heading" v-if="!qrTimeoutElapsed">Scan or Click to pay</h4>
-            <button v-else class="button" @click="step = 'thankyou'; celebrate()">Done?</button>
+            <h4 class="qr-heading" v-if="!qrTimeoutElapsed">Scan or click to pay</h4>
+            <button v-else type="button" class="button" @click="step = 'thankyou'; celebrate()">Done?</button>
           </Transition>
         </div>
-        <div v-else-if="step == 'thankyou'">
-          <div><img v-if="image" class="image" :src="image" width="150" height="150" :alt="name" /></div>
-          <div>
-            <h3>Thank you</h3>
+        <div v-else-if="step == 'thankyou'" class="step">
+          <div class="avatar">
+            <img v-if="image" class="image" :src="image" width="120" height="120" :alt="name" />
+            <span class="badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12.5l4.5 4.5L19 7.5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
           </div>
-          <div>
-            <button class="button" @click="reset(); step = 'start'">Start over</button>
-          </div>
+          <h3>Thank you</h3>
+          <button type="button" class="ghost-button" @click="reset(); step = 'start'">Start over</button>
         </div>
-        <div v-else-if="step == 'error'">
-          <h3 style="margin-bottom: 0">{{ errorTitle }}</h3>
-          <p class="mb-2" v-html="errorMessage">
-          </p>
-          <button class="button" @click="reset(); step = 'start'">Start over</button>
+        <div v-else-if="step == 'error'" class="step">
+          <div class="error-icon">!</div>
+          <h3 class="mb-0">{{ errorTitle }}</h3>
+          <p v-html="errorMessage"></p>
+          <button type="button" class="button" @click="reset(); step = 'start'">Start over</button>
         </div>
       </Transition>
     </div>
@@ -205,7 +173,7 @@ export default {
 
     // Install fonts (do need to be included outside of the shadow dom)
     const fontImport = document.createElement("link");
-    fontImport.setAttribute("href", "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+    fontImport.setAttribute("href", "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
     fontImport.setAttribute("rel", "stylesheet");
     fontImport.setAttribute("type", "text/css");
 
@@ -361,7 +329,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Reset CSS */
 abbr,
@@ -531,31 +499,31 @@ select {
 
 * {
   font-family: "Inter", sans-serif;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+  box-sizing: border-box;
 }
 
 #root {
+  --glass: color-mix(in srgb, var(--color) 12%, transparent);
+  --glass-strong: color-mix(in srgb, var(--color) 22%, transparent);
+  --muted: color-mix(in srgb, var(--color) 70%, transparent);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.06), 0 12px 24px rgba(0, 0, 0, 0.08), 0 24px 48px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
   position: relative;
   min-width: 250px;
   width: 100%;
+  -webkit-font-smoothing: antialiased;
 }
 
 .card {
-  box-shadow: 0px 32px 32px rgba(0, 0, 0, 0.07), 0px 16px 16px rgba(0, 0, 0, 0.07), 0px 8px 8px rgba(0, 0, 0, 0.07), 0px 4px 4px rgba(0, 0, 0, 0.07), 0px 2px 2px rgba(0, 0, 0, 0.07);
-  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-radius: 28px;
   color: var(--color);
-  padding: 25px;
+  padding: 52px 24px 24px;
   background-color: var(--accent);
-  min-height: 290px;
+  /* 290px content + padding, same outer size as before */
+  min-height: 340px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -564,104 +532,348 @@ select {
   background-position: center center;
 }
 
-.card>div {
+/* Soft top-light sheen over the accent color */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.06));
+  pointer-events: none;
+}
+
+.step {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 14px;
+  width: 100%;
 }
 
-.qr {
-  background: #FFFFFF;
-  box-shadow: 0px 32px 32px rgba(0, 0, 0, 0.07), 0px 16px 16px rgba(0, 0, 0, 0.07), 0px 8px 8px rgba(0, 0, 0, 0.07), 0px 4px 4px rgba(0, 0, 0, 0.07), 0px 2px 2px rgba(0, 0, 0, 0.07);
-  border-radius: 5px;
-  padding: 8px;
+.toolbar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
 }
 
-.mb-1 {
-  margin-bottom: 1em;
-}
-
-.mb-2 {
-  margin-bottom: 2em;
-}
-
-.button {
-  font-size: 17px;
-  background: #FFFFFF;
-  box-shadow: 0px 32px 32px rgba(0, 0, 0, 0.07), 0px 16px 16px rgba(0, 0, 0, 0.07), 0px 8px 8px rgba(0, 0, 0, 0.07), 0px 4px 4px rgba(0, 0, 0, 0.07), 0px 2px 2px rgba(0, 0, 0, 0.07);
-  border-radius: 50px;
-  padding: 10px 30px;
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   border: none;
-  flex: none;
-  color: var(--button-color);
-  font-weight: bold;
-  border: 1px solid transparent;
-  transition: all 0.1s ease-in;
-}
-
-.button:hover {
+  background: var(--glass);
   cursor: pointer;
-  background: var(--accent);
-  border: 1px solid #FFF;
-  color: var(--color);
+  transition: background 0.15s ease;
 }
 
-.card .image {
-  background: #FFFFFF;
-  box-shadow: 0px 32px 32px rgba(0, 0, 0, 0.07), 0px 16px 16px rgba(0, 0, 0, 0.07), 0px 8px 8px rgba(0, 0, 0, 0.07), 0px 4px 4px rgba(0, 0, 0, 0.07), 0px 2px 2px rgba(0, 0, 0, 0.07);
-  border-radius: 100px;
-  max-width: 150px;
+.icon-button:hover {
+  background: var(--glass-strong);
 }
 
 .logo {
+  display: inline-flex;
+  padding: 9px;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+.logo:hover {
+  opacity: 1;
+}
+
+.card .image {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--glass-strong), var(--shadow);
+}
+
+.avatar {
+  position: relative;
+}
+
+.badge {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  right: 2px;
+  bottom: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color);
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow-sm);
+  animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both 0.15s;
 }
 
-textarea {
-  max-width: 90%;
-  background: none;
+.badge path {
+  stroke: var(--accent);
+}
+
+.address {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  margin-top: -10px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  background: var(--glass);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+  border-radius: 50px;
+  padding: 12px 28px;
   border: none;
-  outline: none;
-  resize: none;
-  text-align: center;
-  color: var(--color);
-  font-size: 17px;
-
+  color: var(--button-color);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-textarea::placeholder {
-  color: var(--color);
-  opacity: 0.5;
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
 }
 
-input {
-  font-size: 17px;
+.button:active,
+.ghost-button:active,
+.pill:active {
+  transform: scale(0.97);
+}
+
+.ghost-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color);
+  background: var(--glass);
   border: none;
   border-radius: 50px;
   padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.ghost-button:hover {
+  background: var(--glass-strong);
+}
+
+.qr {
+  display: block;
+  background: #FFFFFF;
+  box-shadow: var(--shadow);
+  border-radius: 20px;
+  padding: 10px;
+  line-height: 0;
+  transition: transform 0.15s ease;
+}
+
+.qr:hover {
+  transform: scale(1.02);
+}
+
+.qr img {
+  border-radius: 8px;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.pill-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.pill {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color);
+  background: var(--glass);
+  border: 1px solid transparent;
+  padding: 10px 8px;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.pill:hover {
+  background: var(--glass-strong);
+}
+
+.pill.active {
+  background: var(--color);
+  color: var(--accent);
+}
+
+.amount-input {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 280px;
+}
+
+input {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
   text-align: center;
   color: var(--button-color);
-  font-weight: bold;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
   outline: none;
-  font-size: 16px;
-  max-width: 200px;
+}
+
+input.has-suffix {
+  padding: 12px 52px;
 }
 
 input::placeholder {
   color: var(--button-color);
+  font-weight: 500;
   opacity: 0.5;
 }
 
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+.suffix {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--button-color);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.note {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  background: var(--glass);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  outline: none;
+  resize: none;
+  padding: 12px 14px 24px;
+  text-align: left;
+  color: var(--color);
+  font-size: 15px;
+  line-height: 1.45;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+textarea:focus {
+  background: var(--glass-strong);
+  border-color: var(--glass-strong);
+}
+
+textarea::placeholder {
+  color: var(--color);
+  opacity: 0.55;
+}
+
+.counter {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.spinner {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--glass);
+}
+
+.spinner::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--color);
+  animation: spin 0.9s linear infinite;
+}
+
+.spinner svg {
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.error-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass);
+  font-size: 26px;
+  font-weight: 700;
 }
 
 a,
@@ -673,36 +885,11 @@ a:hover {
   text-decoration: none;
 }
 
-.pill {
-  font-size: 17px;
-  border: 1px solid var(--color);
-  color: var(--color);
-  padding: 0.5em 1em;
-  border-radius: 50px;
-  flex-grow: 1;
-  text-align: center;
-  margin-bottom: 1em;
-  margin-left: 0.25em;
-  margin-right: 0.25em;
-  cursor: pointer;
-}
-
-.pill:hover {
-  color: var(--accent);
-  background: var(--color);
-}
-
-.pill-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.back {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 10;
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color);
+  outline-offset: 3px;
 }
 
 #confetti {
@@ -711,25 +898,32 @@ a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 25px;
   pointer-events: none;
+  z-index: 20;
 }
 
 h3 {
-  font-size: 24px;
-  margin: 1em;
-  line-height: 29px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 8px;
 }
 
 h4 {
-  font-size: 17px;
-  margin: 1em;
-  line-height: 21px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0 8px;
+  max-width: 220px;
+  color: var(--muted);
 }
 
 p {
-  margin: 1em 0;
-  line-height: 1.5em;
+  margin: 0 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 a.text-link,
@@ -753,4 +947,49 @@ a.text-link:active {
 .qr-heading {
   text-align: center;
   margin: 0;
-}</style>
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
