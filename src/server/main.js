@@ -11,12 +11,6 @@ const app = express();
 
 app.use(cors())
 
-// log which sites embed the widget (no query params, they contain recipients/invoices)
-app.use(["/params", "/invoice"], function (req, res, next) {
-  console.log(`[usage] ${req.baseUrl} origin=${req.get("origin") || "-"} referer=${req.get("referer") || "-"}`);
-  next();
-});
-
 app.use(express.static(path.join(__dirname, '../../dist'), { maxAge: 5 * 60 * 1000 }))
 app.use('/assets', express.static(path.join(__dirname, '../../assets')))
 
