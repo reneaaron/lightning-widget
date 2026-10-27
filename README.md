@@ -1,7 +1,7 @@
 # ⚡ Lightning Widget
 
 > [!WARNING]
-> **Discontinued.** The hosted widget (`embed.twentyuno.net`) was shut down in October 2026 and this repository is archived. Existing embeds no longer load. You can still self-host it from this source.
+> **Discontinued.** The hosted widget (`widgets.twentyuno.net`) was shut down in October 2026 and this repository is archived. Existing embeds no longer load. You can still self-host it from this source.
 
 Start accepting Bitcoin payments on your website in minutes. Beautiful widgets, no fees, instant payouts.
 
